@@ -36,15 +36,6 @@ async function checkName(contacts, driver) {
 }
 
 function writeCsv(data) {
-    try {
-
-        if (!fs.existsSync('E:/Projects/Selenium/data/contacts')) {
-            console.log("Folder does not exist. Creating... ")
-            fs.mkdir('E:/Projects/Selenium/data/contacts', { recursive: true }, err => { });
-        }
-    } catch (error) {
-        console.log(error);
-    }
     const csvWriter = createCsvWriter({
         path: `data/contacts/contactsE.csv`,
         header: [
@@ -71,7 +62,7 @@ async function zaloNameCheck() {
     await driver.get('https://chat.zalo.me/');
     await driver.manage().window().maximize();
     let data = [];
-    data = readData('E:/Projects/Selenium/data/contacts/contacts.csv', data);
+    data = readData('./data/contacts/contacts.csv', data);
 
     try {
 

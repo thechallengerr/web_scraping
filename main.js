@@ -2,9 +2,9 @@ const express = require('express');
 const axios = require('axios');
 const { Builder, By, Key, until, JavascriptExecutor, Capabilities } = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
-const { fbFriendsCrawler, } = require('./facebook_friends.js');
-const { getAllZaloGroups } = require('./zalo_groups.js');
-const { getSpecificGroupMembers } = require('./getGroupMembers.js');
+const { fbFriendsCrawler, } = require('./scripts/facebook_friends.js');
+const { getAllZaloGroups } = require('./scripts/zalo_groups.js');
+const { getSpecificGroupMembers } = require('./scripts/getGroupMembers.js');
 const csvReader = require('csv-parser');
 const fs = require('fs');
 const cors = require('cors');
@@ -17,12 +17,11 @@ const port = 8888;
 app.use(cors())
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('E:/Projects/Selenium/src'))
 
 
 //Route 
 app.get('/', (req, res) => {
-	res.sendFile('E:/Projects/Selenium/src/index.html')
+	res.sendFile(path.join(__dirname, 'src/index.html'));
 });
 
 
@@ -65,19 +64,19 @@ app.post('/fb-friends', (req, res) => {
 					<div class="container mb-5">`+ header + html + `</div>`);
 	}).catch((err) => {
 		console.error(err);
-		res.sendFile('E:/Projects/Selenium/src/404.html');
+		res.sendFile(path.join(__dirname, 'src/404.html'));
 	}
 	);
 	// res.send(req.body);
 });
 
 app.get('/fb-friends', (req, res) => {
-	res.sendFile('E:/Projects/Selenium/src/crawl-friends-fb.html');
+	res.sendFile(path.join(__dirname, 'src/crawl-friends-fb.html'));
 })
 
 
 app.get('/zalo-specific-group', (req, res) => {
-	res.sendFile('E:/Projects/Selenium/src/crawl-gr-members-zalo.html');
+	res.sendFile(path.join(__dirname, 'src/crawl-gr-members-zalo.html'));
 	// res.send('Specific Group members');
 });
 

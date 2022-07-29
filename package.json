@@ -21,7 +21,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon scripts/main.js"
+    "start": "nodemon main.js"
   },
   "author": "",
   "license": "ISC"
