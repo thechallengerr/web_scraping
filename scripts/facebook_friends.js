@@ -27,10 +27,12 @@ async function fbFriendsCrawler(acc, pwd, options, data) {
 	try {
 		await loginFacebook(acc, pwd, driver);
 		console.log("Login successfully");
+
 		// block notifications on login
 		await sleep(5000);
-		let overlay = driver.wait(until.elementLocated(By.xpath('/html/body/div[6]/div[1]/div/div[2]')));
-		if (overlay) {
+		let overlay = await driver.wait(until.elementLocated(By.xpath('/html/body/div[6]/div[1]/div/div[2]')));
+		await driver.sleep(3000);
+		if (overlay.isDisplayed()) {
 			console.log('Overlay found');
 			await overlay.click();
 			console.log('Overlay clicked');
@@ -52,6 +54,8 @@ async function fbFriendsCrawler(acc, pwd, options, data) {
 			console.log(user);
 		}
 		data = new Array();
+
+
 		//get  all friends
 		if (options === "friend") {
 			await getFriends(driver, data);
@@ -110,6 +114,8 @@ async function getFriends(driver, data) {
 	}
 }
 
+
+// Write data to .csv file
 function writeCsv(user, data) {
 	try {
 

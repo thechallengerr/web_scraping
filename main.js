@@ -106,24 +106,25 @@ app.post('/zalo-specific-group', (req, res) => {
 		})
 		.catch((err) => {
 			console.log(err);
-			res.sendFile('E:/Projects/Selenium/src/404.html');
+			res.sendFile(path.join(__dirname, 'src/404.html'));
 		});
 });
 
 
 
 app.get('/zalo-groups', (req, res) => {
-	res.sendFile('E:/Projects/Selenium/src/crawl-groups-zalo.html');
+	res.sendFile(path.join(__dirName, 'src/crawl-groups-zalo.html'));
 
 });
 
 app.post('/zalo-groups', (req, res) => {
 	let data;
-	getAllZaloGroups(data).then(groups => {
-		console.log(groups);
-		// res.json(groups);
-		let htmls = groups.map(group => {
-			return `
+	getAllZaloGroups(data)
+		.then(groups => {
+			console.log(groups);
+			// res.json(groups);
+			let htmls = groups.map(group => {
+				return `
 			<div class="friend-list">
 				
 				<div class="row border-bottom mt-2">
@@ -139,9 +140,9 @@ app.post('/zalo-groups', (req, res) => {
 				</div>
 				
 			</div>`
-		});
-		let html = htmls.join('');
-		let header = `	<div class="row border-bottom mt-2">
+			});
+			let html = htmls.join('');
+			let header = `	<div class="row border-bottom mt-2">
 							<div class="col-sm-2 font-weight-bold">
 								No.
 							</div>
@@ -152,11 +153,15 @@ app.post('/zalo-groups', (req, res) => {
 								Number of participants
 							</div>
 						</div>`
-		res.send(`<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+			res.send(`<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
 		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 						<h3 class= "mt-5 mb-5 text-center text-uppercase font-weight-bold">Result</h3>
 						<div class="container mb-5">`+ header + html + `</div>`)
-	});
+		})
+		.catch((err) => {
+			console.log(err);
+			res.sendFile(path.join(__dirname, 'src/404.html'));
+		});
 })
 
 app.listen(port, () => {
