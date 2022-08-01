@@ -4,10 +4,12 @@
   "description": "selenium",
   "main": "index.js",
   "dependencies": {
+    "connect-busboy": "^1.0.0",
     "cors": "^2.8.5",
     "create-react-app": "^5.0.1",
     "csv-parser": "^3.0.0",
     "csv-writer": "^1.6.0",
+    "express-fileupload": "^1.4.0",
     "jpickle": "^0.4.1",
     "mkdirp": "^1.0.4",
     "nodemon": "^2.0.19",

@@ -31,10 +31,6 @@ function readData(filename, data) {
     }
 }
 
-async function checkName(contacts, driver) {
-
-}
-
 function writeCsv(data) {
     const csvWriter = createCsvWriter({
         path: `data/contacts/contactsE.csv`,
@@ -57,11 +53,11 @@ async function clear(driver, elm) {
     await driver.executeScript("arguments[0].value = '';", elm)
 }
 // main process
-async function zaloNameCheck() {
+async function zaloNameCheck(data) {
     let driver = await new Builder().forBrowser('chrome').build();
     await driver.get('https://chat.zalo.me/');
     await driver.manage().window().maximize();
-    let data = [];
+    data = [];
     data = readData('./data/contacts/contacts.csv', data);
 
     try {
@@ -93,7 +89,8 @@ async function zaloNameCheck() {
         }
         writeCsv(data);
 
-        console.log(data);
+        // console.log(data);
+        return data;
     } catch (errors) {
         console.log(errors);
 
@@ -103,4 +100,5 @@ async function zaloNameCheck() {
 }
 
 
-zaloNameCheck().then().catch(function (err) { console.error(err); });
+// zaloNameCheck().then().catch(function (err) { console.error(err); });
+module.exports = { zaloNameCheck }

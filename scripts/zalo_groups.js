@@ -103,7 +103,7 @@ async function getAllZaloGroups(groups) {
 
                 // click the Groups button again to go back to the list of Grous 
                 viewGroupBtn.click();
-                await sleep(Math.floor(Math.random() * 2000));
+                await sleep(Math.floor(Math.random() * 10000));
             }
         }
 
