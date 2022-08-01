@@ -2,6 +2,7 @@ const { Builder, By, Capabilities, ChromiumWebDriver, Key, until } = require('se
 const chrome = require('selenium-webdriver/chrome');
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 const fs = require('fs');
+const path = require('path');
 const { data } = require('jquery');
 //login with default user 
 let options = new chrome.Options(
@@ -139,8 +140,8 @@ function sleep(ms) {
 
 //write members off each group to file
 function membersWriter(name, members) {
-    if (!fs.existsSync(`E:/Projects/Selenium/data/zalo/groups`)) {
-        fs.mkdir(`E:/Projects/Selenium/data/zalo/groups`, { recursive: true }, err => { });
+    if (!fs.existsSync(path.join(__dirname, `/data/zalo/groups`))) {
+        fs.mkdir(path.join(__dirname, `/data/zalo/groups`), { recursive: true }, err => { });
     }
 
     //config csv file

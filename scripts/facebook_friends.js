@@ -119,9 +119,9 @@ async function getFriends(driver, data) {
 function writeCsv(user, data) {
 	try {
 
-		if (!fs.existsSync('E:/Projects/Selenium/data/facebook/friends')) {
+		if (!fs.existsSync(path.join(__dirName, 'data/facebook/friends'))) {
 			console.log("Folder does not exist. Creating... ")
-			fs.mkdir('E:/Projects/Selenium/data/facebook/friends', { recursive: true }, err => { });
+			fs.mkdir(path.join(__dirName, 'data/facebook/friends'), { recursive: true }, err => { });
 		}
 	} catch (error) {
 		console.log(error);

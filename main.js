@@ -98,7 +98,8 @@ app.post('/zalo-specific-group', (req, res) => {
 				</div>`
 			});
 			let html = htmls.join('');
-			let header = `<h3 class="mt-5 mb-5">Group: ${data.gr_name} </h3>`
+			let header = `<h3 class="mt-5 mb-5">Group: ${data.gr_name} </h3>
+						<h3 class="mt-3 mb-3">No. of Members: ${data.members.length} </h3>`
 			res.send(`<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
 		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 						<h3 class= "mt-5 mb-5 text-center text-uppercase font-weight-bold">Result</h3>
@@ -113,7 +114,7 @@ app.post('/zalo-specific-group', (req, res) => {
 
 
 app.get('/zalo-groups', (req, res) => {
-	res.sendFile(path.join(__dirName, 'src/crawl-groups-zalo.html'));
+	res.sendFile(path.join(__dirname, 'src/crawl-groups-zalo.html'));
 
 });
 
