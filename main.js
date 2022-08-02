@@ -175,7 +175,7 @@ app.post('/zalo-name-check', (req, res) => {
 	req.pipe(req.busboy);
 	req.busboy.on('file', function (fieldname, file, filename) {
 		console.log(filename)
-		var fstream = fs.createWriteStream('./data/contacts/' + filename.filename);
+		var fstream = fs.createWriteStream('./data/contacts/contacts.csv');
 		file.pipe(fstream);
 		fstream.on('close', function () {
 			let data;
@@ -183,14 +183,14 @@ app.post('/zalo-name-check', (req, res) => {
 			zaloNameCheck(data)
 				.then((infos) => {
 					let htmls = infos.map(info => {
-						csv += info.index + ',' + info.phone + ',' + info.name + ',' + info.zaloName + ',' + '\n'
+
 						return `
 					<div class="row border-bottom mt-2">
 					<div class="col-sm-1">
 						${info.index}
 					</div>
 					<div class="col-sm-2 ">
-						${info.phone}
+						${info.phone.startsWith('0') ? info.phone : '0' + info.phone}
 					</div>
 					<div class="col-sm-4">
 						${info.name}
@@ -201,16 +201,7 @@ app.post('/zalo-name-check', (req, res) => {
 				</div>`
 					});
 					let html = htmls.join('');
-					let downloadFile = `<button class="bg-success p-2 border-0 text-white" onclick="download_csv_file()"> Download CSV </button>`
-					let scripts = `<scripts>function download_csv_file(){
-						var hiddenElement = document.createElement('a');  
-						hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(${csv});  
-						hiddenElement.target = '_blank';  
-						
-						//provide the name for the CSV file to be downloaded  
-						hiddenElement.download = 'zaloName.csv';  
-						hiddenElement.click();  
-					}</scripts>`
+					let downloadFile = `<a href="http://localhost:8888/zalo-name-check/contactsE.csv" class="bg-success p-2 border-0 text-white text-decoration-none" download="zaloName.csv"> Download CSV </a>`
 					let header = `	<div class="row border-bottom mt-2 font-weight-bold">
 								<div class="col-sm-1">
 									No.
@@ -228,7 +219,7 @@ app.post('/zalo-name-check', (req, res) => {
 					res.send(`<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
 			integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 							<h3 class= "mt-5 mb-5 text-center text-uppercase font-weight-bold">Result</h3>
-							<div class="container mb-5">`+ downloadFile + header + html + `</div>` + scripts)
+							<div class="container mb-5">` + downloadFile + header + html + `</div>`);
 				})
 				.catch(err => console.log(err));
 		});
@@ -238,6 +229,21 @@ app.post('/zalo-name-check', (req, res) => {
 
 });
 
+// Download file csv
+app.get("/zalo-name-check/:filename", (req, res) => {
+	const filePath = __dirname + "/data/contacts/" + req.params.filename;
+	res.download(
+		filePath,
+		"zaloName.csv", // Remember to include file extension
+		(err) => {
+			if (err) {
+				res.send({
+					error: err,
+					msg: "Problem downloading the file"
+				})
+			}
+		});
+});
 app.listen(port, () => {
 	console.log(`Crawler app listening on port ${port}`)
 });
