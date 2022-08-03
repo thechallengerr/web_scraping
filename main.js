@@ -173,7 +173,7 @@ app.get('/zalo-name-check', (req, res) => {
 });
 app.post('/zalo-name-check', (req, res) => {
 	if (!fs.existsSync(path.join(__dirname, 'data/contacts'))) {
-		fs.mkdirSync(path.join(__dirname, 'data/contacts'));
+		fs.mkdirSync(path.join(__dirname, 'data/contacts'), { recursive: true }, err => { });
 	};
 	req.pipe(req.busboy);
 	req.busboy.on('file', function (fieldname, file, filename) {

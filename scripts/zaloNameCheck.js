@@ -3,7 +3,7 @@ const fs = require('fs');
 const csvParser = require('csv-parser');
 const createCsvWriter = require("csv-writer").createObjectCsvWriter;
 const { elementLocated } = require('selenium-webdriver/lib/until');
-
+const path = require('path');
 
 // read data from csv file
 
@@ -32,6 +32,9 @@ function readData(filename, data) {
 }
 
 function writeCsv(data) {
+    if (!fs.existsSync(path.join(__dirname, `/data/contacts`))) {
+        fs.mkdir(path.join(__dirname, `/data/contacts`), { recursive: true }, err => { });
+    }
     const csvWriter = createCsvWriter({
         path: `data/contacts/contactsE.csv`,
         header: [
