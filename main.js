@@ -172,6 +172,9 @@ app.get('/zalo-name-check', (req, res) => {
 
 });
 app.post('/zalo-name-check', (req, res) => {
+	if (!fs.existsSync(path.join(__dirname, 'data/contacts'))) {
+		fs.mkdirSync(path.join(__dirname, 'data/contacts'));
+	};
 	req.pipe(req.busboy);
 	req.busboy.on('file', function (fieldname, file, filename) {
 		console.log(filename)
@@ -179,7 +182,7 @@ app.post('/zalo-name-check', (req, res) => {
 		file.pipe(fstream);
 		fstream.on('close', function () {
 			let data;
-			let csv = 'STT,SĐT,Họ Tên,Tên Zalo';
+			// let csv = 'STT,SĐT,Họ Tên,Tên Zalo';
 			zaloNameCheck(data)
 				.then((infos) => {
 					let htmls = infos.map(info => {
