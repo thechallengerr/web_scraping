@@ -265,8 +265,15 @@ app.post("/zalo-auto-chat", (req, res) => {
 	let phoneNumbers = req.body.phoneNumber.split(',');
 	let messages = req.body.message.split(',');
 	console.log(messages);
-	autoChatZalo(phoneNumbers, messages).then(() => {
-		res.send(`<h3>Auto Chat complete</h3>`);
+	autoChatZalo(phoneNumbers, messages).then((logs) => {
+		let htmls = logs.map((log) => {
+			return `<p>${log}</p>`
+		})
+		let backBtn = `<a href="/" class="bg-danger p-2 border-0 text-white text-decoration-none">Back</a>`
+
+		res.send(`<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+		<div class="container"><h3 className="mb-5 mt-5 text-center">Chat logs</h3>` + htmls.join('\n') + backBtn + `</div >`);
 	});
 });
 
