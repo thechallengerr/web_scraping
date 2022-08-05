@@ -17,9 +17,7 @@ function rename(name) {
 }
 
 function membersWriter(name, members) {
-	if (!fs.existsSync(path.join(__dirname, `/data/zalo/groups`))) {
-		fs.mkdir(path.join(__dirname, `/data/zalo/groups`), { recursive: true }, err => { });
-	}
+
 
 	//config csv file
 	const memberWriter = createCsvWriter({

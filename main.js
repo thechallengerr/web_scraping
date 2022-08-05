@@ -6,6 +6,7 @@ const { fbFriendsCrawler, } = require('./scripts/facebook_friends.js');
 const { getAllZaloGroups } = require('./scripts/zalo_groups.js');
 const { getSpecificGroupMembers } = require('./scripts/getGroupMembers.js');
 const { zaloNameCheck } = require('./scripts/zaloNameCheck.js');
+const { autoChatZalo } = require('./scripts/autoChatZalo.js');
 const csvReader = require('csv-parser');
 const fs = require('fs');
 const cors = require('cors');
@@ -85,6 +86,9 @@ app.get('/zalo-specific-group', (req, res) => {
 app.post('/zalo-specific-group', (req, res) => {
 	let data;
 	console.log(req.body);
+	if (!fs.existsSync(path.join(__dirname, `/data/zalo/groups`))) {
+		fs.mkdir(path.join(__dirname, `/data/zalo/groups`), { recursive: true }, err => { });
+	}
 	getSpecificGroupMembers(req.body.group, data)
 		.then((data) => {
 			let htmls = data.members.map(member => {
@@ -122,6 +126,9 @@ app.get('/zalo-groups', (req, res) => {
 
 app.post('/zalo-groups', (req, res) => {
 	let data;
+	if (!fs.existsSync(path.join(__dirname, `/data/zalo/groups`))) {
+		fs.mkdir(path.join(__dirname, `/data/zalo/groups`), { recursive: true }, err => { });
+	}
 	getAllZaloGroups(data)
 		.then(groups => {
 			console.log(groups);
@@ -248,6 +255,22 @@ app.get("/zalo-name-check/:filename", (req, res) => {
 			}
 		});
 });
+
+app.get("/zalo-auto-chat", (req, res) => {
+	res.sendFile(path.join(__dirname, "src/auto-chat-zalo.html"));
+});
+
+app.post("/zalo-auto-chat", (req, res) => {
+	console.log(req.body);
+	let phoneNumbers = req.body.phoneNumber.split(',');
+	let messages = req.body.message.split(',');
+	console.log(messages);
+	autoChatZalo(phoneNumbers, messages).then(() => {
+		res.send(`<h3>Auto Chat complete</h3>`);
+	});
+});
+
+
 app.listen(port, () => {
 	console.log(`Crawler app listening on port ${port}`)
 });

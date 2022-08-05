@@ -32,11 +32,11 @@ function readData(filename, data) {
 }
 
 function writeCsv(data) {
-    if (!fs.existsSync(path.join(__dirname, `/data/contacts`))) {
-        fs.mkdir(path.join(__dirname, `/data/contacts`), { recursive: true }, err => { });
-    }
+    // if (!fs.existsSync(path.resolve(__dirname, `../data/contacts`))) {
+    //     fs.mkdir(path.resolve(__dirname, `../data/contacts`), { recursive: true }, err => { });
+    // }
     const csvWriter = createCsvWriter({
-        path: `data/contacts/contactsE.csv`,
+        path: `data/contacts/zaloName.csv`,
         header: [
             { id: "index", title: "index" },
             { id: "phone", title: "phone" },
@@ -50,11 +50,6 @@ function writeCsv(data) {
         .then(() => console.log("The CSV file was written successfully"));
 }
 
-async function clear(driver, elm) {
-    await driver.sleep(2000);
-    await driver.executeScript("arguments[0].value = '';", elm);
-    console.log('clear');
-}
 // main process
 async function zaloNameCheck(data) {
     let driver = await new Builder().forBrowser('chrome').build();
