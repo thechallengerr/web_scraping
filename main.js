@@ -264,16 +264,22 @@ app.post("/zalo-auto-chat", (req, res) => {
 	console.log(req.body);
 	let phoneNumbers = req.body.phoneNumber.split(',');
 	let messages = req.body.message.split(',');
+	if (phoneNumbers.length === 0 || messages.length === 0) {
+		res.send("No phone was found. Please comeback and try again.");
+	}
 	console.log(messages);
 	autoChatZalo(phoneNumbers, messages).then((logs) => {
 		let htmls = logs.map((log) => {
 			return `<p>${log}</p>`
 		})
-		let backBtn = `<a href="/" class="bg-danger p-2 border-0 text-white text-decoration-none">Back</a>`
+		let backBtn = `<a href="/" class="bg-danger p-2 border-0 text-white text-decoration-none mb-5">Back</a>`
 
 		res.send(`<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
 		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 		<div class="container"><h3 className="mb-5 mt-5 text-center">Chat logs</h3>` + htmls.join('\n') + backBtn + `</div >`);
+	}).catch(err => {
+		console.log(err);
+		res.sendFile(path.join(__dirname, 'src/404.html'))
 	});
 });
 
