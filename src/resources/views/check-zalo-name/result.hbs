@@ -1,0 +1,34 @@
+<h3 class="mt-5 mb-5 text-center text-uppercase font-weight-bold">Result</h3>
+<div class="row border-bottom mt-2 font-weight-bold">
+    <div class="col-sm-1">
+        No.
+    </div>
+    <div class="col-sm-2">
+        Phone Number
+    </div>
+    <div class="col-sm-4">
+        Name
+    </div>
+    <div class="col-sm-5">
+        Zalo Name
+    </div>
+</div>
+{{#each infos}}
+<div class="row border-bottom mt-2">
+    <div class="col-sm-1">{{@index}}</div>
+    <div class="col-sm-2 ">
+        {{this.phone.startsWith('0') ? this.phone : '0' + this.phone}}
+    </div>
+    <div class="col-sm-4">
+        {{this.name}}
+    </div>
+    <div class="col-sm-5 font-weight-bold">
+        {{this.zaloName}}
+    </div>
+</div>
+{{/each}}
+<a href="/check-zalo-name/zaloName.csv" class="mt-4 bg-success p-2 border-0 text-white text-decoration-none"
+    download="zaloName.csv"> Download CSV </a>
+
+<div class="mt-5 d-flex justify-content-center text-center mb-5"><a href="javascript:history.back()"
+        class="bg-danger p-2 border-0 text-white text-center text-decoration-none rounded">Back</a></div>

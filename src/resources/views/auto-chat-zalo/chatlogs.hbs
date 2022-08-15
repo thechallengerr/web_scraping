@@ -1,0 +1,56 @@
+<h3 class="fw-bold">Chat Logs</h3>
+
+<div class="container">
+    {{#each messages}}
+    <div class="message-item mt-2 mb-4">
+        <div class="time d-flex flex-row align-items-center justify-content-center mb-2">
+            <div class="line bg-secondary mr-2" style="background-color: #000;height:1px;"></div>
+            <div class="timestamp d-flex align-items-center" style="min-width: 300px;">
+                <p class="text-secondary fs-1 text-center" style="font-size: 12px;margin-bottom: 0">
+                    {{this.createdAt}}</p>
+            </div>
+            <div class="line bg-secondary ml-2" style="background-color: #000;height:1px;"></div>
+        </div>
+
+        {{#if this.content }}
+        {{#ifeq this.content "Xin lỗi! Hiện tại tôi không muốn nhận tin nhắn."}}
+        <div class="bg-danger rounded p-3 d-flex align-items-center">
+            <p class="text-white" style="font-size: 18px;margin-bottom:0px;"> You are blocked by <strong
+                    class="fw-bold">{{this.from}}</strong>
+        </div>
+        {{/ifeq}}
+        {{#ifnoteq this.content "Xin lỗi! Hiện tại tôi không muốn nhận tin nhắn."}}
+        <div class="bg-success rounded p-3 d-flex align-items-center">
+            <p class="text-white" style="font-size: 18px;margin-bottom:0px;"> "<strong
+                    class="fw-bold">{{this.content}}</strong>" sent by
+                <strong class="fw-bold">{{this.from}}</strong> at <strong class="fw-bold">{{this.sentAt}}</strong>
+
+        </div>
+        {{/ifnoteq}}
+
+        {{else}}
+        <div class="bg-warning rounded p-3 d-flex align-items-center">
+            <p class="text-white" style="font-size: 18px;margin-bottom:0px;">No response from <strong
+                    class="fw-bold">{{this.from}}</strong>
+            </p>
+        </div>
+        {{/if}}
+
+
+
+    </div>
+
+    {{/each}}
+</div>
+
+<div class="mt-5 d-flex justify-content-center text-center mb-5"><a href="javascript:history.back()"
+        class="bg-danger p-2 border-0 text-white text-center text-decoration-none rounded">Back</a></div>
+<script>
+    const Handlebars = require('express-handlebars');
+    let line = document.querySelectorAll('.line');
+    let timestamp = document.querySelector('.timestamp');
+    let msgItem = document.querySelector('.message-item');
+    line.forEach(function (line) {
+        line.style.width = (msgItem.offsetWidth - timestamp.offsetWidth) / 2 + 'px';
+    });
+</script>

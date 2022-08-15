@@ -1,0 +1,29 @@
+{{#each data}}
+<div class="container">
+    <h4 class="text-left text-black">{{this.groupName}}</h4>
+    <h5 class="text-left text-black">{{this.groupQuantity}}</h5>
+    <div class="row border-bottom mt-2">
+        <div class="col-sm-2">
+            No.
+        </div>
+        <div class="col-sm-10 text-primary">
+            Member Name
+        </div>
+
+    </div>
+    {{#each this.groupMembers}}
+    <div class="row border-bottom mt-2">
+        <div class="col-sm-2">
+            {{@index}}
+        </div>
+        <div class="col-sm-10 text-primary">
+            {{this.[0]}}
+        </div>
+
+    </div>
+    {{/each}}
+
+
+</div>
+
+{{/each}}

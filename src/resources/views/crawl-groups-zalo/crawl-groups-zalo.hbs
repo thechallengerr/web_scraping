@@ -1,0 +1,14 @@
+<div class="form__fb">
+    <h3 class="mb-5">To get started, please verify your account via QR code to allow our tool to get all your
+        groups. Click Crawl to continue</h3>
+    <form method="post" action="/crawl-groups-zalo/crawl">
+        <button type="submit" class="btn btn-primary crawl-fb-friends">Crawl</button>
+        <a class="btn btn-danger ml-5 backBtn p-2 text-white" href="/">Back</a>
+    </form>
+</div>
+<script>
+    let backBtn = document.querySelector('.backBtn');
+    backBtn.onclick = function () {
+        window.location.replace('/');
+    } 
+</script>

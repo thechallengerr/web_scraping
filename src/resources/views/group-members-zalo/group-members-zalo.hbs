@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{!-- Boostrap --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="mt-5">
+            <h3 class="mb-5">To get started,you have to verify your zalo login via QR code . Click Auto Chat to continue
+            </h3>
+            <form method="post" action="/group-members-zalo/crawl">
+                <div class="form-group">
+                    <label for="phoneNumber" style="font-size: 24px;">Enter group name in which you want to get all the
+                        members here</label>
+                    <input type="text" name="groupName" class="form-control" id="groupName" placeholder="Group name">
+                </div>
+                <button type="submit" class="btn btn-primary crawl-fb-friends">Crawl</button>
+                <a class="btn btn-danger ml-5 backBtn p-2 text-white" href="/">Back</a>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
