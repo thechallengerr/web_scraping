@@ -1,4 +1,4 @@
-const Message = require("../models/Message");
+
 const { mongooseToMultipleObjects } = require('../../util/mongoose.js');
 const { checkZaloName } = require('../../util/check_zalo_name.js');
 const fs = require('fs');

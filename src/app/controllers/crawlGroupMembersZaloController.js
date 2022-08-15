@@ -18,7 +18,7 @@ class crawlGroupsZaloController {
     getSpecificGroupMembers(req.body.groupName, data)
       .then(data => {
         console.log(data);
-        res.json(data);
+        res.render('group-members-zalo/result', data);
       })
       .catch((err) => {
         console.log(err);

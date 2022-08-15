@@ -50,7 +50,7 @@ async function getSpecificGroupMembers(groupName, data) {
         // Find groups by Name
         let findXpath = '//*[@id="contact-search-input"]';
         // let inputMessageXpath = '/html/body/div/div/div[2]/main/div/article/div[4]/div[3]/div/div/div/div/div[1]';
-
+        await driver.sleep(1000);
         let search = await driver.wait(until.elementLocated(By.xpath(findXpath)));
         await search.sendKeys(groupName);
         let groupFound = await driver.wait(until.elementLocated(By.xpath('/html/body/div/div/div[2]/nav/div[2]/div[3]/div/div[2]/div/div/div[1]/div/div[1]/div/div/div[2]')));
