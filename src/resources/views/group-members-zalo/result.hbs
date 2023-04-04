@@ -1,5 +1,5 @@
-{{#each data}}
 <div class="container">
+    {{#with groupzs}}
     <h4 class="text-left text-black">{{this.groupName}}</h4>
     <h5 class="text-left text-black">{{this.groupQuantity}}</h5>
     <div class="row border-bottom mt-2">
@@ -14,16 +14,15 @@
     {{#each this.groupMembers}}
     <div class="row border-bottom mt-2">
         <div class="col-sm-2">
-            {{this.[0]}}
+            {{this.memberId}}
         </div>
         <div class="col-sm-10 text-primary">
-            {{this.[1]}}
+            {{this.memberName}}
         </div>
 
     </div>
     {{/each}}
 
 
+    {{/with}}
 </div>
-
-{{/each}}

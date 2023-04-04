@@ -43,7 +43,6 @@ async function getSpecificGroupMembers(groupName, data) {
     //open zalo with maximum size of browser window
     await driver.get('https://chat.zalo.me');
     driver.manage().window().maximize();
-    driver.sleep(20000);
     try {
         data = {};
         let members = new Array();
@@ -54,8 +53,9 @@ async function getSpecificGroupMembers(groupName, data) {
         let search = await driver.wait(until.elementLocated(By.xpath(findXpath)));
         await search.sendKeys(groupName);
         let groupFound = await driver.wait(until.elementLocated(By.xpath('/html/body/div/div/div[2]/nav/div[2]/div[3]/div/div[2]/div/div/div[1]/div/div[1]/div/div/div[2]')));
-        await driver.sleep(5000);
+        await driver.sleep(8000);
         await groupFound.click();
+        await driver.sleep(3000);
 
         // Get group display  name
         let groupNameElm = await driver.wait(until.elementLocated(By.className('title header-title')));

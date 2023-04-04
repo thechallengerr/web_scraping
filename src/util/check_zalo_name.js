@@ -58,7 +58,7 @@ function writeCsv(data) {
 }
 
 // main process
-async function zaloNameCheck(data) {
+async function checkZaloName(data) {
     let driver = await new Builder().forBrowser('chrome').build();
     await driver.get('https://chat.zalo.me/');
     await driver.manage().window().maximize();
@@ -102,5 +102,5 @@ async function zaloNameCheck(data) {
 }
 
 
-// zaloNameCheck().then().catch(function (err) { console.error(err); });
-module.exports = { zaloNameCheck }
+// checkZaloName().then().catch(function (err) { console.error(err); });
+module.exports = { checkZaloName }

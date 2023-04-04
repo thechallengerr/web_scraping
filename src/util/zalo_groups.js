@@ -24,14 +24,14 @@ async function getAllZaloGroups(groups) {
     await driver.get('https://chat.zalo.me');
     driver.manage().window().maximize();
     try {
-        await sleep(10000);
+        await driver.sleep(10000);
         groups = new Array();
         let members = new Array();
         // Find the Contacts tab and click to show contact list 
         let contact = await driver.wait(until.elementLocated(By.xpath('//*[@id="main-tab"]/div[1]/div[2]/div[2]')));
         await contact.click();
         console.log('contact tab clicked');
-        await sleep(3000);
+        await driver.sleep(3000);
 
         // Find the Group button and click to show group list
         let viewGroupBtn = await driver.wait(until.elementLocated(By.xpath('//*[@id="contactList"]/div[1]/div/div[1]/div/div/div[3]/div')));
@@ -68,6 +68,7 @@ async function getAllZaloGroups(groups) {
             for (let j = 0; j < xpathList[i].length; j++) {
                 // Loop through every element of the array and find group with the xpath then click
                 await driver.wait(until.elementLocated(By.xpath(xpathList[i][j]))).click();
+                await driver.sleep(Math.floor(Math.random() * 1000) + 1000);
 
                 // Get group name
                 let groupNameElm = await driver.wait(until.elementLocated(By.className('title header-title')));
@@ -76,6 +77,7 @@ async function getAllZaloGroups(groups) {
                 // click to show members on the right side
                 let ele = await driver.wait(until.elementLocated(By.className('subtitle__groupmember__content')));
                 await ele.click();
+                await driver.sleep(Math.floor(Math.random() * 1000) + 1000);
 
                 // Get all the groups' member name and avatar url
                 let membersName = await driver.wait(until.elementsLocated(By.css('.chat-box-member__info__name')));
@@ -110,6 +112,7 @@ async function getAllZaloGroups(groups) {
                 Groupz.findOne({
                     groupName: groupName,
                     groupMembers: members,
+                    groupQuantity: members.length
                 }, function (err, doc) {
                     if (!doc) {
                         groupz.save(function (err) {
@@ -121,13 +124,13 @@ async function getAllZaloGroups(groups) {
                     }
                 })
                 //write to file csv
-                membersWriter(groupName.split(' ').join('_'), members);
+                // membersWriter(groupName.split(' ').join('_'), members);
                 members.splice(0, members.length);
-
                 // click the Groups button again to go back to the list of Grous 
                 viewGroupBtn.click();
-                await sleep(Math.floor(Math.random() * 10000));
+                await sleep(Math.floor(Math.random() * 7000));
             }
+            await driver.executeScript(`window.scrollTo({top: ${i}*500,behavior: 'smooth'});`);
         }
 
         // groupWriter.writeRecords(groups).then(() => console.log('The CSV file was written successfully')).catch(function (error) {
@@ -141,10 +144,7 @@ async function getAllZaloGroups(groups) {
     } finally {
         await driver.quit();
     }
-    // setTimeout(async function () {
 
-    // }, 20000);
-    // wait for manual login verification so setTimeout at 15 seconds
 }
 // Config .csv file 
 const groupWriter = createCsvWriter({

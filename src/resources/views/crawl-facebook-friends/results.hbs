@@ -1,0 +1,29 @@
+<div class="container mt-5">
+    <h3 class="text-center">Result</h3>
+    <div class="row border-bottom mt-2 font-weight-bold" style="font-size: 18px;">
+        <div class="col-sm-1">
+            No.
+        </div>
+        <div class="col-sm-4">
+            Facebook
+        </div>
+        <div class="col-sm-7">
+            Facebook Link
+        </div>
+
+    </div>
+    {{#each friends}}
+    <div class="row border-bottom mt-2" style="font-size: 18px;">
+        <div class="col-sm-1">
+            {{@index}}
+        </div>
+        <div class="col-sm-4">
+            {{this.name}}
+        </div>
+        <div class="col-sm-7">
+            <a href="{{this.link}}">{{this.link}}</a>
+        </div>
+
+    </div>
+    {{/each}}
+</div>

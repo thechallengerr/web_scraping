@@ -7,32 +7,41 @@ const {
     Capabilities,
 } = require("selenium-webdriver");
 const webdriver = require("selenium-webdriver");
+const Friend = require('../app/models/Friend');
+const path = require('path');
 // const options =new Chrome();
 
 const { elementLocated } = require("selenium-webdriver/lib/until");
 const createCsvWriter = require("csv-writer").createObjectCsvWriter;
 const fs = require("fs");
-const path = require("path");
-const mkdirp = require('mkdirp');
 const chrome = require('selenium-webdriver/chrome')
 
-const options = new chrome.Options();
+let options = new chrome.Options();
+options.addArguments("--user-data-dir=C:\\Users\\Dell\\AppData\\Local\\Google\\Chrome\\User Data\\Default");
 
 options.addArguments(['--disable-notifications']);
 
-let data = [];
 async function fbFriendsCrawler(acc, pwd, options, data) {
-    const driver = await new Builder().forBrowser("chrome").setChromeOptions(options).build();
+
+    const driver = await new Builder().forBrowser("chrome").build();
     driver.get("https://facebook.com");
     driver.manage().window().maximize();
+
     try {
-        loginFacebook(acc, pwd, driver);
+        await loginFacebook(acc, pwd, driver);
         console.log("Login successfully");
-        //click on the overlay to close the overlay
-        await sleep(5000);
+
+        // block notifications on login
+        await driver.sleep(5000);
+        await driver.actions().keyDown(Key.ESCAPE).perform();
+        await driver.sleep(3000);
+        // await driver.sleep(5000);
+        console.log("Esc pressed")
         // go to profile page and get uid 
-        let el = await driver.wait(until.elementLocated(By.css('li > [data-visualcompletion="ignore-dynamic"]')));
+
+        let el = await driver.wait(until.elementLocated(By.xpath('/html/body/div[1]/div[1]/div[1]/div/div[3]/div/div/div/div[1]/div[1]/div/div[1]/div/div/div[1]/div/div/div[1]/ul/li/div/a')));
         await el.click();
+        console.log('Go to profile page');
         let user = '';
         let userUrl = await driver.getCurrentUrl();
         if (!userUrl.includes('https://www.facebook.com/profile.php?id=')) {
@@ -43,25 +52,27 @@ async function fbFriendsCrawler(acc, pwd, options, data) {
             user = userUrl.slice(40, userUrl.length);
             console.log(user);
         }
+        data = new Array();
 
-        //get  friends
-        if (options === "friend") {
-            await getFriends(driver);
+
+        // get  all friends
+        if (options === "friends") {
+            await getFriends(driver, data);
         }
-
-        //save to csv file
-        writeCsv(user, data);
-
+        console.log(data);
         return data;
+
+
+
 
     } catch (error) {
         console.error(error);
     } finally {
-        await driver.close();
+        await driver.quit();
     }
 }
 
-async function getFriends(driver) {
+async function getFriends(driver, data) {
     // click on Friends tab
     let showFriend = await driver.wait(until.elementLocated(By.xpath('/html/body/div[1]/div/div[1]/div/div[3]/div/div/div/div[1]/div[1]/div/div/div[3]/div/div/div/div[1]/div/div/div[1]/div/div/div/div/div/div/a[3]')));
     await showFriend.click();
@@ -74,7 +85,7 @@ async function getFriends(driver) {
         //scroll
         await driver.executeScript('window.scrollBy(0, screen.height);');
         console.log('Scrolled');
-        await sleep(Math.floor((Math.random() * 5000) + 5000));
+        await driver.sleep(Math.floor((Math.random() * 5000) + 5000));
 
         // Calculate the friends found again
         let friendsAfterScrolling = await driver.wait(until.elementsLocated(By.xpath('//*[@class="buofh1pr hv4rvrfc"]/div[1]/a')), 15000);
@@ -89,21 +100,44 @@ async function getFriends(driver) {
 
     // store data to array
     for (let i = 0; i < friendsBeforeScrolling.length; i++) {
-        console.log((i + 1) + ', ' + await friendsBeforeScrolling[i].getText() + '\n' + await friendsBeforeScrolling[i].getAttribute('href'));
+
+        let index = i + 1;
+        let name = await friendsBeforeScrolling[i].getText();
+        let link = await friendsBeforeScrolling[i].getAttribute('href');
+        console.log(index + ', ' + name + '\n' + link);
         data.push({
-            index: i + 1,
-            name: await friendsBeforeScrolling[i].getText(),
-            link: await friendsBeforeScrolling[i].getAttribute('href'),
+            index: index,
+            name: name,
+            link: link,
         });
+        const friend = new Friend({
+            name: name,
+            link: link
+        });
+        Friend.findOne({
+            name: name,
+            link: link
+        }).then((err, doc) => {
+            if (!doc) {
+                friend.save(function (err) {
+                    if (!err) console.log('Successfully save ');
+                });
+
+            } else {
+                console.log('Friend' + name + ' already exists in DB');
+            }
+        })
     }
 }
 
+
+// Write data to .csv file
 function writeCsv(user, data) {
     try {
 
-        if (!fs.existsSync('E:/Projects/Selenium/data/facebook/friends')) {
+        if (!fs.existsSync(path.join(__dirName, 'data/facebook/friends'))) {
             console.log("Folder does not exist. Creating... ")
-            fs.mkdir('E:/Projects/Selenium/data/facebook/friends', { recursive: true }, err => { });
+            fs.mkdir(path.join(__dirName, 'data/facebook/friends'), { recursive: true }, err => { });
         }
     } catch (error) {
         console.log(error);
@@ -121,30 +155,21 @@ function writeCsv(user, data) {
         .writeRecords(data)
         .then(() => console.log("The CSV file was written successfully"));
 }
-function sleep(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-}
 
 async function loginFacebook(username, password, driver) {
     await driver.findElement(By.id("email")).sendKeys(username);
     await driver.findElement(By.id("pass")).sendKeys(password, Key.ENTER);
-    sleep(5000);
-    //block notifications on login
-    let overlay = driver.wait(until.elementLocated(By.xpath('/html/body/div[5]/div[1]/div/div[2]')));
-    if (overlay) {
-        console.log('Overlay already found');
-    }
-    await sleep(1000);
-    await overlay.click();
-    console.log('Overlay clicked');
+    await driver.sleep(5000);
+
+
 }
 
-// fbFriendsCrawler("thelight1701@gmail.com", "Hoangnd*1701", "friend").catch((err) =>
+// fbFriendsCrawler("hoangnd171@gmail.com", "Passw0rd171", "friend").then(data => console.log(data)).catch((err) =>
 // 	console.error(err)
 // );
 
 // acount 1 : Vus2huong2001@…. Vudz2001
 
-module.exports = { fbFriendsCrawler, data }
+module.exports = { fbFriendsCrawler }
 
 
